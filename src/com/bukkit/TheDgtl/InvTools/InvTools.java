@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.bukkit.block.BlockDamageLevel;
 import org.bukkit.entity.Player;
 import org.bukkit.Server;
 import org.bukkit.event.Event.Priority;
@@ -41,7 +42,6 @@ public class InvTools extends JavaPlugin {
         
         loadProperties();
         
-        // TODO: Switch this to block destroyed when it is implemented.
         pm.registerEvent(Event.Type.BLOCK_DAMAGED, blockListener, Priority.Normal, this);
         
         PluginDescriptionFile pdfFile = this.getDescription();
@@ -77,6 +77,7 @@ public class InvTools extends JavaPlugin {
 
         @Override
         public void onBlockDamaged(BlockDamageEvent event) {
+        	if (event.getDamageLevel() != BlockDamageLevel.BROKEN) return;
         	Player player = event.getPlayer();
 
         	if (player.getItemInHand().getDamage() >= repairPoint) {
