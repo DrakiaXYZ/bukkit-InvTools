@@ -1,0 +1,37 @@
+=============
+ Description
+=============
+A basic tool invincibility plugin for Bukkit. Ported from my hMod plugin.
+
+=============
+ Features
+=============
+Ability to toggle invincibility on a per-item basis.
+Tools are only repaired when their damage reaches a certain threshold.
+
+=============
+ Config
+=============
+Config info is stored in YAML file plugins/InvTools.conf
+Variables:
+	groupPolicy - Not Implemented in Bukkit version.
+	Tools - A comma-separated list of item IDs that should be invincible.
+	RepairPoint - An integer that sets the minimum damage an item is repaired at.
+	
+Defaults:
+	groupPolicy - False
+	Tools - 277,278,279,293 (Diamond tools)
+	RepairPoint - 30 (Wood breaks at 33)
+
+=============
+ Known Bugs
+=============
+- Items can be destroyed if used to attack.
+- Bukkit doesn't have the functions required for group-level access.
+- Bukkit doesn't have the hooks to do checks on block destroy, may be slow.
+  
+=============
+ Compiling
+=============
+Place bukkit-0.0.1-SNAPSHOT.jar in "bukkit-InvTools", load
+the project in Eclipse, and export a JAR.
