@@ -42,7 +42,7 @@ public class InvTools extends JavaPlugin {
         
         loadConfig();
         
-        pm.registerEvent(Event.Type.BLOCK_DAMAGED, blockListener, Priority.Normal, this);
+        pm.registerEvent(Event.Type.BLOCK_DAMAGED, blockListener, Priority.Monitor, this);
         
         PluginDescriptionFile pdfFile = this.getDescription();
         log.info(pdfFile.getName() + " v" + pdfFile.getVersion() + " is enabled.");
