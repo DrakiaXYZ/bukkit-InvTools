@@ -40,7 +40,7 @@ public class InvTools extends JavaPlugin {
     public void onEnable() {
         PluginManager pm = getServer().getPluginManager();
         
-        loadProperties();
+        loadConfig();
         
         pm.registerEvent(Event.Type.BLOCK_DAMAGED, blockListener, Priority.Normal, this);
         
@@ -48,22 +48,21 @@ public class InvTools extends JavaPlugin {
         log.info(pdfFile.getName() + " v" + pdfFile.getVersion() + " is enabled.");
     }
     
-	public void loadProperties() {
-		Configuration prop = new Configuration(new File("plugins/InvTools.conf"));
+	public void loadConfig() {
 		try {
-			prop.load();
-			groupPolicy = prop.getBoolean("groupPolicy", false);
-			repairPoint = prop.getInt("repairPoint", 30);
+			Configuration config = this.getConfiguration();
+			groupPolicy = config.getBoolean("groupPolicy", false);
+			repairPoint = config.getInt("repairPoint", 30);
 			
 			// Load tools that are invincible. Convert to integers.
 			tools = new HashMap<Integer, Boolean>();
-			String[] tmp = prop.getString("Tools", "277,278,279,293").split(",");
+			String[] tmp = config.getString("Tools", "277,278,279,293").split(",");
 			for (String tool : tmp) {
 				if (tool.equals("")) continue;
 				tools.put(Integer.parseInt(tool), true);
 			}
 		} catch (Exception e) {
-			log.log(Level.SEVERE, "Exception while loading plugins/InvTools.conf", e);
+			log.log(Level.SEVERE, "Exception while loading InvTools/config.yml", e);
 		}
 	}
     
@@ -76,7 +75,7 @@ public class InvTools extends JavaPlugin {
         }
 
         @Override
-        public void onBlockDamaged(BlockDamageEvent event) {
+        public void onBlockDamage(BlockDamageEvent event) {
         	if (event.getDamageLevel() != BlockDamageLevel.BROKEN) return;
         	Player player = event.getPlayer();
 

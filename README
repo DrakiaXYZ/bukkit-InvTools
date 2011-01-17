@@ -12,7 +12,7 @@ Tools are only repaired when their damage reaches a certain threshold.
 =============
  Config
 =============
-Config info is stored in YAML file plugins/InvTools.conf
+Config info is stored in YAML file plugins/InvTools/config.yml
 Variables:
 	groupPolicy - Not Implemented in Bukkit version.
 	Tools - A comma-separated list of item IDs that should be invincible.
@@ -28,10 +28,3 @@ Defaults:
 =============
 - Items can be destroyed if used to attack.
 - Bukkit doesn't have the functions required for group-level access.
-- Bukkit doesn't have the hooks to do checks on block destroy, may be slow.
-  
-=============
- Compiling
-=============
-Place bukkit-0.0.1-SNAPSHOT.jar in "bukkit-InvTools", load
-the project in Eclipse, and export a JAR.
