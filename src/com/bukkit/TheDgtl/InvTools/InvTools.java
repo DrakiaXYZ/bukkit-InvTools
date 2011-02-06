@@ -19,6 +19,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.util.config.Configuration;
 
+// Permissions
+import com.nijikokun.bukkit.Permissions.Permissions;
+import com.nijiko.permissions.PermissionHandler;
+import org.bukkit.plugin.Plugin;
+
 /**
  * InvTools for Bukkit
  *
@@ -32,6 +37,9 @@ public class InvTools extends JavaPlugin {
 	Integer repairPoint;
 	Map<Integer, Boolean> tools;
     
+	// Permissions
+	PermissionHandler Permissions = null;
+    
     public InvTools(PluginLoader pluginLoader, Server instance, PluginDescriptionFile desc, File folder, File plugin, ClassLoader cLoader) {
     	super(pluginLoader, instance, desc, folder, plugin, cLoader);
     	log = Logger.getLogger("Minecraft");
@@ -40,18 +48,20 @@ public class InvTools extends JavaPlugin {
     public void onEnable() {
         PluginManager pm = getServer().getPluginManager();
         
+        setupPermissions();
         loadConfig();
         
         pm.registerEvent(Event.Type.BLOCK_DAMAGED, blockListener, Priority.Monitor, this);
         
         PluginDescriptionFile pdfFile = this.getDescription();
-        log.info(pdfFile.getName() + " v" + pdfFile.getVersion() + " is enabled.");
+        log.info(pdfFile.getName() + " v." + pdfFile.getVersion() + " is enabled.");
     }
     
 	public void loadConfig() {
 		try {
 			Configuration config = this.getConfiguration();
 			groupPolicy = config.getBoolean("groupPolicy", false);
+			if (Permissions == null) groupPolicy = false;
 			repairPoint = config.getInt("repairPoint", 30);
 			
 			// Load tools that are invincible. Convert to integers.
@@ -78,20 +88,30 @@ public class InvTools extends JavaPlugin {
         public void onBlockDamage(BlockDamageEvent event) {
         	if (event.getDamageLevel() != BlockDamageLevel.BROKEN) return;
         	Player player = event.getPlayer();
-
-        	if (player.getItemInHand().getDamage() >= repairPoint) {
+        	if (player.getItemInHand().getDurability() >= repairPoint) {
 	    		int itemInHand = player.getItemInHand().getTypeId();
-	    		//Boolean inGroup = false;
+	    		Boolean inGroup = false;
 	    		
 	    		if (tools.containsKey(itemInHand)) {
-	    			// TODO: Re-enable group policies when it's implemented.
-	    			//if (groupPolicy && player.canUseCommand("/InvTools")) inGroup = true;
-	    			//if (!groupPolicy || inGroup) {
+	    			if (groupPolicy && Permissions.has(player, "invtools.allow")) inGroup = true;
+	    			if (!groupPolicy || inGroup) {
 	    				// Tool is invincible. Set damage to 0.
-	    				player.getItemInHand().setDamage((byte)0);
-	    			//}
+	    				player.getItemInHand().setDurability((short)0);
 	    		}
         	}
         }
+        }
+    }
+    
+    public void setupPermissions() {
+    	Plugin perm  = this.getServer().getPluginManager().getPlugin("Permissions");
+
+    	if(Permissions == null) {
+    	    if(perm != null) {
+    			Permissions = ((Permissions)perm).getHandler();
+    	    } else {
+    	    	log.info("[" + this.getDescription().getName() + "] Permission system not enabled.");
+    	    }
+    	}
     }
 }

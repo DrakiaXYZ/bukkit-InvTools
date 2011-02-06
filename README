@@ -24,7 +24,14 @@ Defaults:
 	RepairPoint - 30 (Wood breaks at 33)
 
 =============
+ Permissions
+=============
+I added support for the Permissions plugin, if it's not enabled then everybody
+gets access to invincible tools. Give any groups you want access the:
+'invtools.allow'
+permissions to enable for specific groups.
+	
+=============
  Known Bugs
 =============
 - Items can be destroyed if used to attack.
-- Bukkit doesn't have the functions required for group-level access.
