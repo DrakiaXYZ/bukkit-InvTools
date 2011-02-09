@@ -1,4 +1,4 @@
-package com.bukkit.TheDgtl.InvTools;
+package net.TheDgtl.InvTools;
 
 import java.io.File;
 import java.util.HashMap;
@@ -50,6 +50,7 @@ public class InvTools extends JavaPlugin {
         
         setupPermissions();
         loadConfig();
+        saveConfig();
         
         pm.registerEvent(Event.Type.BLOCK_DAMAGED, blockListener, Priority.Monitor, this);
         
@@ -74,6 +75,18 @@ public class InvTools extends JavaPlugin {
 		} catch (Exception e) {
 			log.log(Level.SEVERE, "Exception while loading InvTools/config.yml", e);
 		}
+	}
+    
+	public void saveConfig() {
+		Configuration config = getConfiguration();
+		config.setProperty("groupPolicy", groupPolicy);
+		config.setProperty("repairPoint", repairPoint);
+		StringBuilder b = new StringBuilder();
+		for(Integer tool : tools.keySet()) {
+			b.append(tool).append(",");
+		}
+		config.setProperty("Tools", b.toString());
+		config.save();
 	}
     
     public void onDisable() {
