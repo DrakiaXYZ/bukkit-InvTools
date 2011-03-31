@@ -1,37 +1,70 @@
 =============
  Description
 =============
-A basic tool invincibility plugin for Bukkit. Ported from my hMod plugin.
+Invincible tools plugin for Bukkit
+I decided to port my invincible tools plugin from hMod to Bukkit!
+Added invincible armor too, yay!
+
+Download (Direct JAR): http://thedgtl.net/bukkit/InvTools.jar
+Source: https://github.com/TheDgtl/bukkit-InvTools
 
 =============
  Features
 =============
-Ability to toggle invincibility on a per-item basis.
-Tools are only repaired when their damage reaches a certain threshold.
+Ability to set a specific regeneration point (Less resource intensive if you're only making diamond invincible)
+Set what tools are invincible
+Support for Permissions 2.x
+Support for invincible armor
 
 =============
- Config
+Configuration
 =============
-Config info is stored in YAML file plugins/InvTools/config.yml
-Variables:
-	groupPolicy - Not Implemented in Bukkit version.
-	Tools - A comma-separated list of item IDs that should be invincible.
-	RepairPoint - An integer that sets the minimum damage an item is repaired at.
-	
-Defaults:
-	groupPolicy - False
-	Tools - 277,278,279,293 (Diamond tools)
-	RepairPoint - 30 (Wood breaks at 33)
+weaponRepairPoint - At what damage level the tool should be repaired. Higher means longer between repairs. 
+armorRepairPoint - At what damage level the armor should be repaired. Higher means longer between repairs.
+Tools - Comma seperated list of itemIDs to make invincible (Tools).
+Armor - Comma seperated list of itemIDs to make invincible (Armor).
 
 =============
  Permissions
 =============
-I added support for the Permissions plugin, if it's not enabled then everybody
-gets access to invincible tools. Give any groups you want access the:
-'invtools.allow'
-permissions to enable for specific groups.
-	
+invtools.allowtools - Whether this player/group gets invincible tools.
+invtools.allowarmor - Whether this player/group gets invincible armor.
+
 =============
- Known Bugs
+Known Bugs
 =============
-- Items can be destroyed if used to attack.
+ - Items can be destroyed if used to attack.
+
+=============
+  Changes
+=============
+[Version 1.2.0]
+ - Added armor
+ - Changed config/permissions
+[Version 1.1.0]
+ - Changed version numbering
+ - Updated permissions hook method
+ - Updated to latest RB
+[Version 1.06]
+ - More permissions fixes
+[Version 1.05]
+ - Updated to b424jnks
+ - Fixed permission handling
+ - Added README
+ 
+[Version 1.04]
+ - Re-arranged some checks, speed increase (Not noticeable).
+
+[Version 1.03]
+ - Changed package name to net.TheDgtl.*
+ - Created config directory/file if doesn't exist.
+
+[Version 1.02]
+ - Added Permissions support, though not required.
+ - Changed to Durability in latest Bukkit versions.
+
+[Version 1.01]
+ - Switched to Priority.Monitor as I don't stop blocks from being mined.
+ 
+[Version 1.00]
+ - Initial release.
