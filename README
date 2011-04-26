@@ -38,6 +38,8 @@ Known Bugs
 =============
   Changes
 =============
+[Version 1.2.1]
+ - Added update inventory call to show repaired item.
 [Version 1.2.0]
  - Added armor
  - Changed config/permissions

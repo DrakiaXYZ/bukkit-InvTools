@@ -115,7 +115,8 @@ public class InvTools extends JavaPlugin {
                     int itemInHand = player.getItemInHand().getTypeId();
                     if (tools.containsKey(itemInHand)) {
                         // Tool is invincible. Set damage to 0.
-                        player.getItemInHand().setDurability((short)0);
+                        player.getItemInHand().setDurability((short)-1);
+                        player.updateInventory();
                     }
                 }
             }
@@ -132,7 +133,8 @@ public class InvTools extends JavaPlugin {
             for (ItemStack item : player.getInventory().getArmorContents()) {
                 if (item.getDurability() < armorRepairPoint) continue;
                 if (armor.containsKey(item.getTypeId())) {
-                    item.setDurability((short)0);
+                    item.setDurability((short)-1);
+                    player.updateInventory();
                 }
             }
         }
