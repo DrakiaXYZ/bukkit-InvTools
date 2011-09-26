@@ -1,3 +1,10 @@
 name: InvTools
 main: net.TheDgtl.InvTools.InvTools
-version: 1.2.1
+version: 1.2.2
+permissions:
+  invtools.allowtools:
+    description: Allow invincible tools
+    default: true
+  invtools.allowarmor:
+    description: Allow invincible armor
+    default: true

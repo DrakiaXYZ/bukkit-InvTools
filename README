@@ -31,13 +31,11 @@ invtools.allowtools - Whether this player/group gets invincible tools.
 invtools.allowarmor - Whether this player/group gets invincible armor.
 
 =============
-Known Bugs
-=============
- - Items can be destroyed if used to attack.
-
-=============
   Changes
 =============
+[Version 1.2.2]
+ - Moved dura check to PlayerInteract, will work for F&S now, items used to attack no longer destroyed
+ - 5 months without an update, woo!
 [Version 1.2.1]
  - Added update inventory call to show repaired item.
 [Version 1.2.0]

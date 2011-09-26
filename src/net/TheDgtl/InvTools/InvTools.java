@@ -9,6 +9,8 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockListener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityListener;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.event.server.ServerListener;
@@ -30,6 +32,7 @@ import org.bukkit.plugin.Plugin;
  */
 public class InvTools extends JavaPlugin {
     private final bListener blockListener = new bListener();
+    private final pListener playerListener = new pListener();
     private final sListener serverListener = new sListener();
     private final eListener entityListener = new eListener();
     private Logger log;
@@ -52,7 +55,7 @@ public class InvTools extends JavaPlugin {
         saveConfig();
         
         pm.registerEvent(Event.Type.ENTITY_DAMAGE, entityListener, Priority.Monitor, this);
-        pm.registerEvent(Event.Type.BLOCK_BREAK, blockListener, Priority.Monitor, this);
+        pm.registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Priority.Monitor, this);
         pm.registerEvent(Event.Type.PLUGIN_ENABLE, serverListener, Priority.Monitor, this);
         pm.registerEvent(Event.Type.PLUGIN_DISABLE, serverListener, Priority.Monitor, this);
         
@@ -106,12 +109,17 @@ public class InvTools extends JavaPlugin {
     public void onDisable() {
     }
     
-    public class bListener extends BlockListener {
-        @Override
-        public void onBlockBreak(BlockBreakEvent event) {
-            Player player = event.getPlayer();
+    public class pListener extends PlayerListener {
+    	@Override
+    	public void onPlayerInteract(PlayerInteractEvent event) {
+    		// Skip if not using an item
+    		if (!event.hasItem()) return;
+    		// Skip block place
+    		if (event.isBlockInHand()) return;
+    		
+    		Player player = event.getPlayer();
             if (player.getItemInHand().getDurability() >= toolRepairPoint) {
-                if (hasPerm(player, "invtools.allowtools", true)) {
+                if (hasPerm(player, "invtools.allowtools")) {
                     int itemInHand = player.getItemInHand().getTypeId();
                     if (tools.containsKey(itemInHand)) {
                         // Tool is invincible. Set damage to 0.
@@ -120,7 +128,8 @@ public class InvTools extends JavaPlugin {
                     }
                 }
             }
-        }
+    		
+    	}
     }
     
     public class eListener extends EntityListener {
@@ -128,7 +137,7 @@ public class InvTools extends JavaPlugin {
         public void onEntityDamage(EntityDamageEvent event) {
             if (!(event.getEntity() instanceof Player)) return;
             Player player = (Player)event.getEntity();
-            if (!hasPerm(player, "invtools.allowarmor", true)) return;
+            if (!hasPerm(player, "invtools.allowarmor")) return;
             
             for (ItemStack item : player.getInventory().getArmorContents()) {
                 if (item.getDurability() < armorRepairPoint) continue;
@@ -159,11 +168,11 @@ public class InvTools extends JavaPlugin {
     /*
      * Check whether the player has the given permissions.
      */
-    public boolean hasPerm(Player player, String perm, boolean def) {
+    public boolean hasPerm(Player player, String perm) {
         if (permissions != null) {
             return permissions.getHandler().has(player, perm);
         } else {
-            return def;
+            return player.hasPermission(perm);
         }
     }
     
