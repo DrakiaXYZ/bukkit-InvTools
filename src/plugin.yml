@@ -1,6 +1,6 @@
 name: InvTools
 main: net.TheDgtl.InvTools.InvTools
-version: 1.2.2
+version: 1.2.3
 permissions:
   invtools.allowtools:
     description: Allow invincible tools

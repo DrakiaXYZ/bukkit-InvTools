@@ -38,6 +38,8 @@ invtools.allowarmor - Whether this player/group gets invincible armor.
 =============
   Changes
 =============
+[Version 1.2.3]
+ - Changed configuration class
 [Version 1.2.2]
  - Moved dura check to PlayerInteract, will work for F&S now, items used to attack no longer destroyed
  - 5 months without an update, woo!

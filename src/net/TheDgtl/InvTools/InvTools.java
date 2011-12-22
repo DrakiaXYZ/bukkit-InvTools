@@ -3,10 +3,10 @@ package net.TheDgtl.InvTools;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Priority;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockListener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityListener;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -19,7 +19,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.util.config.Configuration;
 
 // Permissions
 import com.nijikokun.bukkit.Permissions.Permissions;
@@ -31,12 +30,12 @@ import org.bukkit.plugin.Plugin;
  * @author TheDgtl
  */
 public class InvTools extends JavaPlugin {
-    private final bListener blockListener = new bListener();
     private final pListener playerListener = new pListener();
     private final sListener serverListener = new sListener();
     private final eListener entityListener = new eListener();
     private Logger log;
     PluginManager pm;
+    FileConfiguration newConfig;
     
     Integer toolRepairPoint;
     Integer armorRepairPoint;
@@ -51,8 +50,8 @@ public class InvTools extends JavaPlugin {
         log = Logger.getLogger("Minecraft");
         
         permissions = (Permissions)checkPlugin("Permissions");
+        newConfig = this.getConfig();
         loadConfig();
-        saveConfig();
         
         pm.registerEvent(Event.Type.ENTITY_DAMAGE, entityListener, Priority.Monitor, this);
         pm.registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Priority.Monitor, this);
@@ -65,45 +64,30 @@ public class InvTools extends JavaPlugin {
     
     public void loadConfig() {
         try {
-            Configuration config = this.getConfiguration();
-            toolRepairPoint = config.getInt("toolRepairPoint", 30);
-            armorRepairPoint = config.getInt("armorRepairPoint", 30);
+        	reloadConfig();
+            newConfig = this.getConfig();
+            
+            toolRepairPoint = newConfig.getInt("toolRepairPoint", 30);
+            armorRepairPoint = newConfig.getInt("armorRepairPoint", 30);
             
             // Load tools that are invincible. Convert to integers.
             tools = new HashMap<Integer, Boolean>();
-            String[] tmp = config.getString("Tools", "277,278,279,293").split(",");
+            String[] tmp = newConfig.getString("Tools", "277,278,279,293").split(",");
             for (String tool : tmp) {
                 if (tool.equals("")) continue;
                 tools.put(Integer.parseInt(tool), true);
             }
             // Load invincible armor
             armor = new HashMap<Integer, Boolean>();
-            tmp = config.getString("Armor", "310,311,312,313").split(",");
+            tmp = newConfig.getString("Armor", "310,311,312,313").split(",");
             for (String arm : tmp) {
                 if (arm.equals("")) continue;
                 armor.put(Integer.parseInt(arm), true);
             }
+            saveConfig();
         } catch (Exception e) {
             log.log(Level.SEVERE, "Exception while loading InvTools/config.yml", e);
         }
-    }
-    
-    public void saveConfig() {
-        Configuration config = getConfiguration();
-        config.setProperty("toolRepairPoint", toolRepairPoint);
-        config.setProperty("armorRepairPoint", armorRepairPoint);
-        StringBuilder b = new StringBuilder();
-        for(Integer tool : tools.keySet()) {
-            b.append(tool).append(",");
-        }
-        config.setProperty("Tools", b.toString());
-        
-        b = new StringBuilder();
-        for (Integer arm : armor.keySet()) {
-            b.append(arm).append(",");
-        }
-        config.setProperty("Armor", b.toString());
-        config.save();
     }
     
     public void onDisable() {
