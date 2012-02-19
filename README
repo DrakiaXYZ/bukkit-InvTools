@@ -38,6 +38,9 @@ invtools.allowarmor - Whether this player/group gets invincible armor.
 =============
   Changes
 =============
+[Version 1.3.0]
+ - Update to latest Bukkit event system
+ - Removed Permissions support, SuperPerms from now on
 [Version 1.2.3]
  - Changed configuration class
 [Version 1.2.2]
