@@ -35,7 +35,6 @@ public class InvTools extends JavaPlugin {
         pm = getServer().getPluginManager();
         log = Logger.getLogger("Minecraft");
         
-        newConfig = this.getConfig();
         loadConfig();
         
         pm.registerEvents(new eListener(), this);
@@ -49,6 +48,7 @@ public class InvTools extends JavaPlugin {
         try {
         	reloadConfig();
             newConfig = this.getConfig();
+            newConfig.options().copyDefaults(true);
             
             toolRepairPoint = newConfig.getInt("toolRepairPoint", 30);
             armorRepairPoint = newConfig.getInt("armorRepairPoint", 30);
@@ -77,6 +77,7 @@ public class InvTools extends JavaPlugin {
     }
     
     public class pListener implements Listener {
+    	@SuppressWarnings("deprecation")
     	@EventHandler(priority = EventPriority.MONITOR)
     	public void onPlayerInteract(PlayerInteractEvent event) {
     		// Skip if not using an item
@@ -100,7 +101,8 @@ public class InvTools extends JavaPlugin {
     }
     
     public class eListener implements Listener {
-    	@EventHandler(priority = EventPriority.MONITOR)
+    	@SuppressWarnings("deprecation")
+		@EventHandler(priority = EventPriority.MONITOR)
         public void onEntityDamage(EntityDamageEvent event) {
             if (!(event.getEntity() instanceof Player)) return;
             Player player = (Player)event.getEntity();
